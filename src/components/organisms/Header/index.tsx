@@ -11,8 +11,8 @@ const Header = () => {
   return (
     <header>
       <Navigation>
-        {items.map((i) => (
-          <NavigationItem href={i.href} content={i.content} />
+        {items.map((i, idx) => (
+          <NavigationItem key={idx} href={i.href} content={i.content} />
         ))}
       </Navigation>
     </header>
