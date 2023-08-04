@@ -1,5 +1,8 @@
 import Hero from '@/components/organisms/Hero'
+import { warn } from 'console'
 
-export default function Home() {
-  return <Hero />
+const Home = () => {
+  return <Hero title="Home" subTitle="Home page" />
 }
+
+export default Home
