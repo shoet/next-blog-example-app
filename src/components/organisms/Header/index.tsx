@@ -3,9 +3,9 @@ import NavigationItem from '@/components/atoms/NavigationItem'
 
 const Header = () => {
   const items = [
-    { href: '#', content: 'page1' },
-    { href: '#', content: 'page2' },
-    { href: '#', content: 'page3' },
+    { href: '/', content: 'Home' },
+    { href: '/blog', content: 'Blog' },
+    { href: '/about', content: 'About' },
   ]
 
   return (
