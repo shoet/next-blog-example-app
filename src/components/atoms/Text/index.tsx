@@ -28,22 +28,30 @@ const variants = {
 }
 
 type TextProps = {
-  variant: Variant
+  variant?: Variant
   color?: Color
   backgroundColor?: Color
   fontSize?: FontSize
   letterSpacing?: LetterSpacing
+  fontWeight?: string
 }
 
-const Text = styled.text.withConfig({
-  shouldForwardProp: (props) => !['variant'].includes(props),
+const Text = styled.span.withConfig({
+  shouldForwardProp: (props) =>
+    !['variant', 'backgroundColor', 'fontSize', 'letterSpacing'].includes(
+      props,
+    ),
 })<TextProps>`
   ${({ variant }) => {
     if (variant && variants[variant]) {
       const style = variants[variant]
       return css`
-        font-size: ${toThemeValue('font-size', style.fontSize, theme)};
-        letter-spacing: ${toThemeValue(
+        !props.fontSize && font-size: ${toThemeValue(
+          'font-size',
+          style.fontSize,
+          theme,
+        )};
+        !props.letterSpacing && letter-spacing: ${toThemeValue(
           'letter-spacing',
           style.letterSpacing,
           theme,
@@ -57,6 +65,7 @@ const Text = styled.text.withConfig({
   font-size: ${(props) => toThemeValue('font-size', props.fontSize, theme)};
   letter-spacing: ${(props) =>
     toThemeValue('letter-spacing', props.letterSpacing, theme)};
+  font-size: ${(props) => toThemeValue('font-weight', props.fontWeight, theme)};
 `
 
 export default Text
