@@ -23,7 +23,24 @@ type BoxProps = {
   minHeight?: string
 }
 
-const Box = styled.div<BoxProps>`
+const Box = styled.div.withConfig({
+  shouldForwardProp: (props) =>
+    ![
+      'backgroundColor',
+      'marginTop',
+      'marginRight',
+      'marginBottom',
+      'marginLeft',
+      'paddingTop',
+      'paddingRight',
+      'paddingBottom',
+      'paddingLeft',
+      'maxWidth',
+      'minWidth',
+      'maxHeight',
+      'minHeight',
+    ].includes(props),
+})<BoxProps>`
   color: ${(props) => toThemeValue('color', props.color, theme)};
   background-color: ${(props) =>
     toThemeValue('background-color', props.backgroundColor, theme)};
