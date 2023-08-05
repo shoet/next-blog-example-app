@@ -12,7 +12,7 @@ const Hero = (props: HeroProps) => {
   return (
     <>
       <Box marginBottom={1}>
-        <Text fontSize="160px" fontWeight="bold" letterSpacing="large">
+        <Text fontSize="160px" fontWeight="900" letterSpacing="large">
           {title}
         </Text>
       </Box>
