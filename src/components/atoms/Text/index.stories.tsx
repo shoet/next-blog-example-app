@@ -16,7 +16,7 @@ const Template: StoryFn<typeof Text> = (args) => <Text {...args} />
 export const WithColor = Template.bind({})
 WithColor.args = {
   children: 'WithColor',
-  color: 'red',
+  color: 'primary',
 }
 
 export const ExtraSmall = Template.bind({})
