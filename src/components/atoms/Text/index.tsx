@@ -36,7 +36,7 @@ type TextProps = {
 }
 
 const Text = styled.text.withConfig({
-  shouldForwardProp: (props) => ['variant'].includes(props),
+  shouldForwardProp: (props) => !['variant'].includes(props),
 })<TextProps>`
   ${({ variant }) => {
     if (variant && variants[variant]) {
