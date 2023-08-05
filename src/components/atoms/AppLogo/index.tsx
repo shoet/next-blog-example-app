@@ -1,18 +1,15 @@
 import styled from 'styled-components'
 
-const AppLogoMock = () => {
-  const Container = styled.div`
-    font-size: 30px;
-    font-weight: bold;
-    display: inline;
-  `
-  return <Container>AppLogo</Container>
-}
+const AppLogoMock = styled.div`
+  font-size: 30px;
+  font-weight: bold;
+  display: inline;
+`
 
 const AppLogo = () => {
   return (
     <div>
-      <AppLogoMock />
+      <AppLogoMock>AppLogo</AppLogoMock>
     </div>
   )
 }

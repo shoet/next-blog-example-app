@@ -2,7 +2,7 @@ import AppLogo from '@/components/atoms/AppLogo'
 import styled from 'styled-components'
 import Link from 'next/link'
 import Text from '@/components/atoms/Text'
-import { Color, toThemeValue } from '@/utils/styles'
+import { toThemeValue } from '@/utils/styles'
 
 const Anchor = styled(Link)`
   color: ${({ theme }) => toThemeValue('color', 'gray', theme)};
@@ -11,6 +11,18 @@ const Anchor = styled(Link)`
     text-decoration: underline;
   }
 `
+const Container = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  `
+
+const Navigation = styled.div`
+    & > a:not(:first-child) {
+      margin-left: 10px;
+    }
+  `
 
 const Header = () => {
   const items = [
@@ -18,19 +30,6 @@ const Header = () => {
     { href: '/blog', content: 'Blog' },
     { href: '/about', content: 'About' },
   ]
-
-  const Container = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  `
-
-  const Navigation = styled.div`
-    & > a:not(:first-child) {
-      margin-left: 10px;
-    }
-  `
 
   return (
     <header>
