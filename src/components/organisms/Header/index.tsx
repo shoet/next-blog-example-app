@@ -1,8 +1,11 @@
 import AppLogo from '@/components/atoms/AppLogo'
 import styled from 'styled-components'
 import Link from 'next/link'
+import Text from '@/components/atoms/Text'
+import { Color, toThemeValue } from '@/utils/styles'
 
 const Anchor = styled(Link)`
+  color: ${({ theme }) => toThemeValue('color', 'gray', theme)};
   text-decoration: none;
   &:hover {
     text-decoration: underline;
@@ -36,7 +39,7 @@ const Header = () => {
         <Navigation as="nav">
           {items.map((i, idx) => (
             <Anchor key={idx} href={i.href}>
-              {i.content}
+              <Text variant="small">{i.content}</Text>
             </Anchor>
           ))}
         </Navigation>
