@@ -34,6 +34,7 @@ type TextProps = {
   fontSize?: FontSize
   letterSpacing?: LetterSpacing
   fontWeight?: string
+  textAlign?: string
 }
 
 const Text = styled.span.withConfig({
@@ -66,6 +67,7 @@ const Text = styled.span.withConfig({
   letter-spacing: ${(props) =>
     toThemeValue('letter-spacing', props.letterSpacing, theme)};
   font-size: ${(props) => toThemeValue('font-weight', props.fontWeight, theme)};
+  text-align: ${(props) => toThemeValue('text-align', props.textAlign, theme)};
 `
 
 export default Text

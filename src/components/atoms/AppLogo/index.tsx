@@ -1,16 +1,18 @@
-import styled from 'styled-components'
-
-const AppLogoMock = styled.div`
-  font-size: 30px;
-  font-weight: bold;
-  display: inline;
-`
+import Text from '../Text'
+import Flex from '@/components/layout/Flex'
 
 const AppLogo = () => {
   return (
-    <div>
-      <AppLogoMock>AppLogo</AppLogoMock>
-    </div>
+    <Flex
+      width="100px"
+      justifyContent="center"
+      padding={2}
+      backgroundColor="primary"
+    >
+      <Text color="white" fontWeight="bold">
+        AppLogo
+      </Text>
+    </Flex>
   )
 }
 

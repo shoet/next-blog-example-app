@@ -1,4 +1,5 @@
 import AppLogo from '@/components/atoms/AppLogo'
+import Flex from '@/components/layout/Flex'
 import Navigation from '@/components/molecules/Navigation'
 import styled from 'styled-components'
 
@@ -12,10 +13,10 @@ const Container = styled.div`
 const Header = () => {
   return (
     <header>
-      <Container>
+      <Flex width="100%" justifyContent="space-between" alignItems="center">
         <AppLogo />
         <Navigation />
-      </Container>
+      </Flex>
     </header>
   )
 }
