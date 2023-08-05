@@ -1,7 +1,13 @@
-import Navigation from '@/components/molecules/Navigation'
-import NavigationItem from '@/components/atoms/NavigationItem'
-import { CSSProperties, PropsWithChildren } from 'react'
 import AppLogo from '@/components/atoms/AppLogo'
+import styled from 'styled-components'
+import Link from 'next/link'
+
+const Anchor = styled(Link)`
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`
 
 const Header = () => {
   const items = [
@@ -10,23 +16,28 @@ const Header = () => {
     { href: '/about', content: 'About' },
   ]
 
-  const Container = ({ children }: PropsWithChildren) => {
-    const style: CSSProperties = {
-      width: '100%',
-      display: 'inline-flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+  const Container = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  `
+
+  const Navigation = styled.div`
+    & > a:not(:first-child) {
+      margin-left: 10px;
     }
-    return <div style={style}>{children}</div>
-  }
+  `
 
   return (
     <header>
       <Container>
         <AppLogo />
-        <Navigation>
+        <Navigation as="nav">
           {items.map((i, idx) => (
-            <NavigationItem key={idx} href={i.href} content={i.content} />
+            <Anchor key={idx} href={i.href}>
+              {i.content}
+            </Anchor>
           ))}
         </Navigation>
       </Container>
