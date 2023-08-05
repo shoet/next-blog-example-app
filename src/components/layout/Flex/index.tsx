@@ -24,7 +24,19 @@ type FlexProps = {
   flexWrap?: CSSPropertyFlexWrap
 }
 
-const Flex = styled(Box)<FlexProps>`
+const Flex = styled(Box).withConfig({
+  shouldForwardProp: (props) =>
+    ![
+      'justifyContent',
+      'justifyItems',
+      'justifySelf',
+      'alignContent',
+      'alignItems',
+      'alignSelf',
+      'flexDirection',
+      'flexWrap',
+    ].includes(props),
+})<FlexProps>`
   display: flex;
   justify-content: ${(props) =>
     toThemeValue('justify-content', props.justifyContent, theme)};
