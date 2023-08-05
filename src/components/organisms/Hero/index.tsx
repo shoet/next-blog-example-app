@@ -1,3 +1,6 @@
+import Text from '@/components/atoms/Text'
+import Box from '@/components/layout/Box'
+
 type HeroProps = {
   title: string
   subTitle: string
@@ -7,11 +10,17 @@ type HeroProps = {
 const Hero = (props: HeroProps) => {
   const { title, subTitle, imageOn } = props
   return (
-    <div>
-      <h1>{title}</h1>
-      <p>{subTitle}</p>
+    <>
+      <Box marginBottom={1}>
+        <Text fontSize="160px" fontWeight="bold" letterSpacing="large">
+          {title}
+        </Text>
+      </Box>
+      <Box>
+        <Text variant="medium">{subTitle}</Text>
+      </Box>
       {imageOn && <figure>画像</figure>}
-    </div>
+    </>
   )
 }
 
