@@ -35,7 +35,9 @@ type TextProps = {
   letterSpacing?: LetterSpacing
 }
 
-const Text = styled.text<TextProps>`
+const Text = styled.text.withConfig({
+  shouldForwardProp: (props) => ['variant'].includes(props),
+})<TextProps>`
   ${({ variant }) => {
     if (variant && variants[variant]) {
       const style = variants[variant]
