@@ -9,7 +9,7 @@ const SpacePropKeys = new Set([
   'margin',
   'margin-top',
   'margin-right',
-  'margin-button',
+  'margin-bottom',
   'margin-left',
   'padding',
   'padding-top',
