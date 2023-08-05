@@ -1,7 +1,9 @@
+import Text from '@/components/atoms/Text'
+
 const Footer = () => {
   return (
     <footer>
-      <h1>Footer</h1>
+      <Text variant="extraLarge">extraLarge</Text>
     </footer>
   )
 }
