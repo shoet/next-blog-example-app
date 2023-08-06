@@ -13,7 +13,9 @@ const Layout = ({ children }: PropsWithChildren) => {
           paddingLeft={{ base: 0, sm: 4 }}
           paddingRight={{ base: 0, sm: 4 }}
         >
-          <Header />
+          <Box marginBottom={3}>
+            <Header />
+          </Box>
           <main>{children}</main>
         </Box>
         <Box marginTop={3}>
