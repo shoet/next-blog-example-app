@@ -30,6 +30,58 @@ export type FontSize = FontSizeThemeKeys | (string & {})
 export type LetterSpacing = LetterSpacingThemeKeys | (string & {})
 export type Space = SpaceThemeKeys | (string & {})
 
+const BREAKPOINT = {
+  sm: '576px',
+  md: '768px',
+  lg: '992px',
+  xl: '1200px',
+}
+
+export type ResponsiveProp<T> = {
+  base?: T
+  sm?: T
+  md?: T
+  lg?: T
+  xl?: T
+}
+export type Responsive<T> = ResponsiveProp<T> | T
+
+export function toResponsiveValue<T>(
+  propKey: string,
+  value: Responsive<T>,
+  theme: AppTheme,
+) {
+  if (isResponsiveProp(value)) {
+    const styles: string[] = []
+    for (const [responsiveKey, responsiveValue] of Object.entries(value)) {
+      if (responsiveKey === 'base') {
+        styles.push(
+          `${propKey}: ${toThemeValue(propKey, responsiveValue, theme)};`,
+        )
+      } else {
+        const breakPoint = BREAKPOINT[responsiveKey as keyof typeof BREAKPOINT]
+        const style = `${propKey}: ${responsiveValue};`
+        const mediaQuery = `@media screen and (min-width: ${breakPoint}) { ${style} }`
+        styles.push(mediaQuery)
+      }
+    }
+    const ret = styles.join('\n')
+    return ret
+  }
+  return `${propKey}: ${toThemeValue(propKey, value, theme)};`
+}
+
+function isResponsiveProp<T>(value: any): value is ResponsiveProp<T> {
+  return (
+    value !== undefined &&
+    (value.base !== undefined ||
+      value.sm !== undefined ||
+      value.md !== undefined ||
+      value.lg !== undefined ||
+      value.xl !== undefined)
+  )
+}
+
 export function toThemeValue(propKey: string, value: any, theme: AppTheme) {
   if (ColorPropKeys.has(propKey) && isColorThemeKey(value, theme)) {
     return theme.colors[value]
