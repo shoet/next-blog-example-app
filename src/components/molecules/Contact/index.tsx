@@ -1,3 +1,4 @@
+import { IconGitHub, IconTwitter, IconYoutube } from '@/components/atoms/Icons'
 import Text from '@/components/atoms/Text'
 import Box from '@/components/layout/Box'
 import Flex from '@/components/layout/Flex'
@@ -20,14 +21,21 @@ const Contact = (props: ContactProps) => {
       <Text marginBottom={2} variant="small">
         Contact
       </Text>
-      <Flex marginBottom={2} flexDirection="row" justifyContent="end">
-        <Text variant="extraSmall" marginRight={1}>
-          ①
-        </Text>
-        <Text variant="extraSmall" marginRight={1}>
-          ②
-        </Text>
-        <Text variant="extraSmall">③</Text>
+      <Flex
+        marginBottom={2}
+        alignItems="center"
+        flexDirection="row"
+        justifyContent="end"
+      >
+        <Box marginRight={2}>
+          <IconGitHub href="#" size={16} />
+        </Box>
+        <Box marginRight={2}>
+          <IconYoutube href="#" size={16} />
+        </Box>
+        <Box marginRight={0}>
+          <IconTwitter href="#" size={16} />
+        </Box>
       </Flex>
       <Text paddingBottom={2} variant="extraSmall">
         example@mail.com
