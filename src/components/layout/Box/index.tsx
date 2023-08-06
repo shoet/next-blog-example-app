@@ -27,6 +27,7 @@ type BoxProps = {
   right?: Responsive<string>
   bottom?: Responsive<string>
   left?: Responsive<string>
+  textAlign?: Responsive<string>
 }
 
 const Box = styled.div.withConfig({
@@ -74,6 +75,7 @@ const Box = styled.div.withConfig({
   ${(props) => toResponsiveValue('right', props.right, theme)}
   ${(props) => toResponsiveValue('bottom', props.bottom, theme)}
   ${(props) => toResponsiveValue('left', props.left, theme)}
+  ${(props) => toResponsiveValue('text-align', props.textAlign, theme)}
 `
 
 export default Box
