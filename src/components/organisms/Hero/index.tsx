@@ -16,7 +16,7 @@ const Hero = (props: HeroProps) => {
       <Flex
         flexDirection={{ base: 'column', lg: 'row' }}
         justifyContent={{ lg: 'space-between' }}
-        alignItems={{ base: 'center' }}
+        alignItems={{ base: 'start' }}
       >
         <Box marginBottom={{ base: 3, xl: 0 }}>
           <Box marginBottom={1}>
@@ -33,13 +33,15 @@ const Hero = (props: HeroProps) => {
           </Flex>
         </Box>
         {imageOn && (
-          <Image
-            src="/myImage.jpg"
-            alt="centerImage"
-            style={{ objectFit: 'contain' }}
-            width={300}
-            height={150}
-          />
+          <Box height="200px">
+            <Image
+              src="/myImage.jpg"
+              alt="centerImage"
+              layout="responsive"
+              width={300}
+              height={150}
+            />
+          </Box>
         )}
       </Flex>
     </>
