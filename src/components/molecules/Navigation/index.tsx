@@ -12,8 +12,21 @@ const items = [
 const Anchor = styled(Link)`
   color: ${({ theme }) => toThemeValue('color', 'gray', theme)};
   text-decoration: none;
-  &:hover {
-    text-decoration: underline;
+
+  @media (hover: hover) {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  /* スマホ環境 */
+  @media (hover: none) {
+    &:hover {
+      -webkit-tap-highlight-color: transparent;
+    }
+    &:hover:active {
+      text-decoration: underline;
+    }
   }
 `
 
