@@ -23,6 +23,10 @@ type BoxProps = {
   minHeight?: Responsive<string>
   flexGrow?: Responsive<number>
   position?: Responsive<string>
+  top?: Responsive<string>
+  right?: Responsive<string>
+  bottom?: Responsive<string>
+  left?: Responsive<string>
 }
 
 const Box = styled.div.withConfig({
@@ -66,6 +70,10 @@ const Box = styled.div.withConfig({
   ${(props) => toResponsiveValue('min-height', props.minHeight, theme)}
   ${(props) => toResponsiveValue('flex-grow', props.flexGrow, theme)}
   ${(props) => toResponsiveValue('position', props.position, theme)}
+  ${(props) => toResponsiveValue('top', props.top, theme)}
+  ${(props) => toResponsiveValue('right', props.right, theme)}
+  ${(props) => toResponsiveValue('bottom', props.bottom, theme)}
+  ${(props) => toResponsiveValue('left', props.left, theme)}
 `
 
 export default Box

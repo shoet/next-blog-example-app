@@ -11,18 +11,28 @@ type ContactProps = {
 const Contact = (props: ContactProps) => {
   const { alignment = 'center' } = props
   return (
-    <Flex flexDirection="column" alignItems={alignment}>
+    <Flex
+      position="sticky"
+      top="40px"
+      flexDirection="column"
+      alignItems={alignment}
+      maxWidth="200px"
+    >
       <Text marginBottom={2} variant="small">
         Contact
       </Text>
       <Flex
         marginBottom={2}
         flexDirection="row"
-        justifyContent="space-between"
+        justifyContent="end"
         width="100%"
       >
-        <Text variant="extraSmall">①</Text>
-        <Text variant="extraSmall">②</Text>
+        <Text variant="extraSmall" marginRight={1}>
+          ①
+        </Text>
+        <Text variant="extraSmall" marginRight={1}>
+          ②
+        </Text>
         <Text variant="extraSmall">③</Text>
       </Flex>
       <Text paddingBottom={2} variant="extraSmall">
