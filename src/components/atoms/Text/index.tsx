@@ -1,5 +1,11 @@
 import { css, styled } from 'styled-components'
-import { Color, FontSize, LetterSpacing, toThemeValue } from '@/utils/styles'
+import {
+  Color,
+  FontSize,
+  LetterSpacing,
+  Responsive,
+  toResponsiveValue,
+} from '@/utils/styles'
 import { theme } from '@/themes'
 
 type Variant = 'extraSmall' | 'small' | 'medium' | 'large' | 'extraLarge'
@@ -29,13 +35,13 @@ const variants = {
 
 type TextProps = {
   variant?: Variant
-  color?: Color
-  backgroundColor?: Color
-  fontSize?: FontSize
-  letterSpacing?: LetterSpacing
-  fontWeight?: string
-  textAlign?: string
-  textShadow?: string
+  color?: Responsive<Color>
+  backgroundColor?: Responsive<Color>
+  fontSize?: Responsive<FontSize>
+  letterSpacing?: Responsive<LetterSpacing>
+  fontWeight?: Responsive<string>
+  textAlign?: Responsive<string>
+  textShadow?: Responsive<string>
 }
 
 const Text = styled.span.withConfig({
@@ -48,30 +54,21 @@ const Text = styled.span.withConfig({
     if (variant && variants[variant]) {
       const style = variants[variant]
       return css`
-        !props.fontSize && font-size: ${toThemeValue(
-          'font-size',
-          style.fontSize,
-          theme,
-        )};
-        !props.letterSpacing && letter-spacing: ${toThemeValue(
-          'letter-spacing',
-          style.letterSpacing,
-          theme,
-        )};
+        !props.fontSize && 
+          ${toResponsiveValue('font-size', style.fontSize, theme)}
+        !props.letterSpacing &&
+          ${toResponsiveValue('letter-spacing', style.letterSpacing, theme)}
       `
     }
   }}
-  color: ${(props) => toThemeValue('color', props.color, theme)};
-  background-color: ${(props) =>
-    toThemeValue('background-color', props.backgroundColor, theme)};
-  font-size: ${(props) => toThemeValue('font-size', props.fontSize, theme)};
-  letter-spacing: ${(props) =>
-    toThemeValue('letter-spacing', props.letterSpacing, theme)};
-  font-weight: ${(props) =>
-    toThemeValue('font-weight', props.fontWeight, theme)};
-  text-align: ${(props) => toThemeValue('text-align', props.textAlign, theme)};
-  text-shadow: ${(props) =>
-    toThemeValue('text-shadow', props.textShadow, theme)};
+  ${(props) => toResponsiveValue('color', props.color, theme)}
+  ${(props) =>
+    toResponsiveValue('background-color', props.backgroundColor, theme)}
+  ${(props) => toResponsiveValue('font-size', props.fontSize, theme)}
+  ${(props) => toResponsiveValue('letter-spacing', props.letterSpacing, theme)}
+  ${(props) => toResponsiveValue('font-weight', props.fontWeight, theme)}
+  ${(props) => toResponsiveValue('text-align', props.textAlign, theme)}
+  ${(props) => toResponsiveValue('text-shadow', props.textShadow, theme)}
 `
 
 export default Text

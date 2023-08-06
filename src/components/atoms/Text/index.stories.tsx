@@ -23,6 +23,7 @@ export const ExtraSmall = Template.bind({})
 ExtraSmall.args = {
   children: 'ExtraSmall',
   variant: 'extraSmall',
+  color: { base: 'red', md: 'blue' },
 }
 
 export const Small = Template.bind({})
