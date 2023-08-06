@@ -12,21 +12,15 @@ const Contact = (props: ContactProps) => {
   const { alignment = 'center' } = props
   return (
     <Flex
-      position="sticky"
+      position={{ sm: 'sticky' }}
       top="40px"
       flexDirection="column"
       alignItems={alignment}
-      maxWidth="200px"
     >
       <Text marginBottom={2} variant="small">
         Contact
       </Text>
-      <Flex
-        marginBottom={2}
-        flexDirection="row"
-        justifyContent="end"
-        width="100%"
-      >
+      <Flex marginBottom={2} flexDirection="row" justifyContent="end">
         <Text variant="extraSmall" marginRight={1}>
           ①
         </Text>
