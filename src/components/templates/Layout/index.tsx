@@ -8,16 +8,17 @@ const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <Flex flexDirection="column" minHeight="100vh">
-        <Box
-          flexGrow={1}
-          paddingLeft={{ base: 2, sm: 4 }}
-          paddingRight={{ base: 2, sm: 4 }}
-        >
+        <Box flexGrow={1}>
           <Box maxWidth="1280px" marginLeft="auto" marginRight="auto">
-            <Box marginBottom={3}>
-              <Header />
+            <Box
+              paddingLeft={{ base: 2, md: 4 }}
+              paddingRight={{ base: 2, md: 4 }}
+            >
+              <Box marginBottom={3}>
+                <Header />
+              </Box>
+              <main>{children}</main>
             </Box>
-            <main>{children}</main>
           </Box>
         </Box>
         <Box marginTop={3}>
