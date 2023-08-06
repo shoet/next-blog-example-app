@@ -9,9 +9,9 @@ type ContentProps = {
 const Content = (props: ContentProps) => {
   const { MainContent, SubContent } = props
   return (
-    <Flex flexDirection={{ base: 'column', sm: 'row' }}>
-      <Box width="70%">{MainContent}</Box>
-      <Box width="30%">{SubContent}</Box>
+    <Flex flexDirection={{ base: 'column', sm: 'row' }} justifyContent="center">
+      <Box width={{ base: '100%', sm: '70%' }}>{MainContent}</Box>
+      <Box width={{ base: '100%', sm: '30%' }}>{SubContent}</Box>
     </Flex>
   )
 }

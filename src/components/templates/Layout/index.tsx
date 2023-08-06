@@ -10,8 +10,8 @@ const Layout = ({ children }: PropsWithChildren) => {
       <Flex flexDirection="column" minHeight="100vh">
         <Box
           flexGrow={1}
-          paddingLeft={{ base: 0, sm: 4 }}
-          paddingRight={{ base: 0, sm: 4 }}
+          paddingLeft={{ base: 2, sm: 4 }}
+          paddingRight={{ base: 2, sm: 4 }}
         >
           <Box marginBottom={3}>
             <Header />
