@@ -4,6 +4,7 @@ import {
   FontSize,
   LetterSpacing,
   Responsive,
+  Space,
   toResponsiveValue,
 } from '@/utils/styles'
 import { theme } from '@/themes'
@@ -42,6 +43,16 @@ type TextProps = {
   fontWeight?: Responsive<string>
   textAlign?: Responsive<string>
   textShadow?: Responsive<string>
+  margin?: Responsive<Space>
+  marginTop?: Responsive<Space>
+  marginRight?: Responsive<Space>
+  marginBottom?: Responsive<Space>
+  marginLeft?: Responsive<Space>
+  padding?: Responsive<Space>
+  paddingTop?: Responsive<Space>
+  paddingRight?: Responsive<Space>
+  paddingBottom?: Responsive<Space>
+  paddingLeft?: Responsive<Space>
 }
 
 const Text = styled.span.withConfig({
@@ -71,6 +82,16 @@ const Text = styled.span.withConfig({
   ${(props) => toResponsiveValue('font-weight', props.fontWeight, theme)}
   ${(props) => toResponsiveValue('text-align', props.textAlign, theme)}
   ${(props) => toResponsiveValue('text-shadow', props.textShadow, theme)}
+  ${(props) => toResponsiveValue('margin', props.margin, theme)}
+  ${(props) => toResponsiveValue('margin-top', props.marginTop, theme)}
+  ${(props) => toResponsiveValue('margin-right', props.marginRight, theme)}
+  ${(props) => toResponsiveValue('margin-bottom', props.marginBottom, theme)}
+  ${(props) => toResponsiveValue('margin-left', props.marginLeft, theme)}
+  ${(props) => toResponsiveValue('padding', props.padding, theme)}
+  ${(props) => toResponsiveValue('padding-top', props.paddingTop, theme)}
+  ${(props) => toResponsiveValue('padding-right', props.paddingRight, theme)}
+  ${(props) => toResponsiveValue('padding-bottom', props.paddingBottom, theme)}
+  ${(props) => toResponsiveValue('padding-left', props.paddingLeft, theme)}
 `
 
 export default Text
