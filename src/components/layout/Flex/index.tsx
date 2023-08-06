@@ -10,18 +10,18 @@ import {
   CSSPropertyJustifyItems,
   CSSPropertyJustifySelf,
 } from '@/types/styles'
-import { toThemeValue } from '@/utils/styles'
+import { Responsive, toResponsiveValue } from '@/utils/styles'
 import { theme } from '@/themes'
 
 type FlexProps = {
-  justifyContent?: CSSPropertyJustifyContent
-  justifyItems?: CSSPropertyJustifyItems
-  justifySelf?: CSSPropertyJustifySelf
-  alignContent?: CSSPropertyAlignContent
-  alignItems?: CSSPropertyAlignItems
-  alignSelf?: CSSPropertyAlignSelf
-  flexDirection?: CSSPropertyFlexDirection
-  flexWrap?: CSSPropertyFlexWrap
+  justifyContent?: Responsive<CSSPropertyJustifyContent>
+  justifyItems?: Responsive<CSSPropertyJustifyItems>
+  justifySelf?: Responsive<CSSPropertyJustifySelf>
+  alignContent?: Responsive<CSSPropertyAlignContent>
+  alignItems?: Responsive<CSSPropertyAlignItems>
+  alignSelf?: Responsive<CSSPropertyAlignSelf>
+  flexDirection?: Responsive<CSSPropertyFlexDirection>
+  flexWrap?: Responsive<CSSPropertyFlexWrap>
 }
 
 const Flex = styled(Box).withConfig({
@@ -38,21 +38,15 @@ const Flex = styled(Box).withConfig({
     ].includes(props),
 })<FlexProps>`
   display: flex;
-  justify-content: ${(props) =>
-    toThemeValue('justify-content', props.justifyContent, theme)};
-  justify-items: ${(props) =>
-    toThemeValue('justify-items', props.justifyItems, theme)};
-  justify-self: ${(props) =>
-    toThemeValue('justify-self', props.justifySelf, theme)};
-  align-content: ${(props) =>
-    toThemeValue('align-content', props.alignContent, theme)};
-  align-items: ${(props) =>
-    toThemeValue('align-items', props.alignItems, theme)};
-  align-self: ${(props) => toThemeValue('align-self', props.alignSelf, theme)};
-  flex-direction: ${(props) =>
-    toThemeValue('flex-direction', props.flexDirection, theme)};
-  flex-wrap: ${(props) => toThemeValue('flex-wrap', props.flexWrap, theme)};
-
+  ${(props) =>
+    toResponsiveValue('justify-content', props.justifyContent, theme)}
+  ${(props) => toResponsiveValue('justify-items', props.justifyItems, theme)}
+  ${(props) => toResponsiveValue('justify-self', props.justifySelf, theme)}
+  ${(props) => toResponsiveValue('align-content', props.alignContent, theme)}
+  ${(props) => toResponsiveValue('align-items', props.alignItems, theme)}
+  ${(props) => toResponsiveValue('align-self', props.alignSelf, theme)}
+  ${(props) => toResponsiveValue('flex-direction', props.flexDirection, theme)}
+  ${(props) => toResponsiveValue('flex-wrap', props.flexWrap, theme)}
 `
 
 export default Flex
