@@ -50,15 +50,17 @@ const Text = styled.span.withConfig({
       props,
     ),
 })<TextProps>`
-  ${({ variant }) => {
-    if (variant && variants[variant]) {
-      const style = variants[variant]
-      return css`
-        !props.fontSize && 
-          ${toResponsiveValue('font-size', style.fontSize, theme)}
-        !props.letterSpacing &&
-          ${toResponsiveValue('letter-spacing', style.letterSpacing, theme)}
-      `
+  ${(props) => {
+    if (props.variant && variants[props.variant]) {
+      const styles = []
+      const style = variants[props.variant]
+      !props.fontSize &&
+        styles.push(toResponsiveValue('font-size', style.fontSize, theme))
+      !props.letterSpacing &&
+        styles.push(
+          toResponsiveValue('letter-spacing', style.letterSpacing, theme),
+        )
+      return css`${styles.join('\n')}`
     }
   }}
   ${(props) => toResponsiveValue('color', props.color, theme)}
