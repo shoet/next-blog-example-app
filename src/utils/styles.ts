@@ -60,7 +60,11 @@ export function toResponsiveValue<T>(
         )
       } else {
         const breakPoint = BREAKPOINT[responsiveKey as keyof typeof BREAKPOINT]
-        const style = `${propKey}: ${responsiveValue};`
+        const style = `${propKey}: ${toThemeValue(
+          propKey,
+          responsiveValue,
+          theme,
+        )};`
         const mediaQuery = `@media screen and (min-width: ${breakPoint}) { ${style} }`
         styles.push(mediaQuery)
       }
