@@ -16,7 +16,7 @@ const Hero = (props: HeroProps) => {
     <>
       <Flex
         flexDirection={{ base: 'column', lg: 'row' }}
-        justifyContent={{ base: 'end', lg: 'end' }}
+        justifyContent={{ base: 'end', lg: 'space-between' }}
         alignItems={{ base: 'center', lg: 'start' }}
         marginBottom={{ base: 3, xl: 0 }}
       >
