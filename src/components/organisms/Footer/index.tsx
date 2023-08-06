@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer>
       <Flex
-        flexDirection="row"
+        flexDirection={{ base: 'column', sm: 'row' }}
         justifyContent="space-between"
         alignItems="center"
         height="200px"
