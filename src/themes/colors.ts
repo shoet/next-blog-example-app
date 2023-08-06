@@ -7,7 +7,7 @@ export const colors = {
   buttonBorderDark: '',
   border: '#AAAAAA',
   borderDark: '',
-  background: '#ffffff',
+  background: '#eeeeee',
   backgroundDark: '#222222',
   accent: '#0d87e0',
   text: 'black',
