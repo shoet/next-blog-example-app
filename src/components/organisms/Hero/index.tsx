@@ -2,6 +2,7 @@ import Text from '@/components/atoms/Text'
 import Box from '@/components/layout/Box'
 import Flex from '@/components/layout/Flex'
 import Image from 'next/image'
+import heroImage from 'images/heroImage.jpg'
 
 type HeroProps = {
   title: string
@@ -15,8 +16,9 @@ const Hero = (props: HeroProps) => {
     <>
       <Flex
         flexDirection={{ base: 'column', lg: 'row' }}
-        justifyContent={{ lg: 'space-between' }}
-        alignItems={{ base: 'start' }}
+        justifyContent={{ base: 'end', lg: 'end' }}
+        alignItems={{ base: 'center', lg: 'start' }}
+        marginBottom={{ base: 3, xl: 0 }}
       >
         <Box marginBottom={{ base: 3, xl: 0 }}>
           <Box marginBottom={1}>
@@ -33,13 +35,15 @@ const Hero = (props: HeroProps) => {
           </Flex>
         </Box>
         {imageOn && (
-          <Box height="200px">
+          <Box height="300px" marginBottom={{ base: 3, xl: 0 }}>
             <Image
-              src="/myImage.jpg"
+              src={heroImage}
               alt="centerImage"
               layout="responsive"
               width={300}
               height={150}
+              priority
+              placeholder="blur"
             />
           </Box>
         )}
