@@ -2,6 +2,7 @@ import Box from '@/components/layout/Box'
 import Hero from '@/components/organisms/Hero'
 import Content from '@/components/templates/Content'
 import Profile from '@/components/molecules/Profile'
+import Contact from '@/components/molecules/Contact'
 
 const MainContent = () => {
   return (
@@ -25,7 +26,10 @@ const About = () => {
       <Box marginBottom={3}>
         <Hero title="About" subTitle="About this blog" />
       </Box>
-      <Content MainContent={<Profile />} SubContent={<SubContent />} />
+      <Content
+        MainContent={<Profile />}
+        SubContent={<Contact alignment="end" />}
+      />
     </>
   )
 }
