@@ -23,7 +23,7 @@ const AppLogo = (props: AppLogoProps) => {
           </Text>
         </Flex>
       ) : (
-        <Text color="black" fontWeight="700">
+        <Text color="black" fontWeight="700" fontSize="medium">
           AppLogo
         </Text>
       )}
