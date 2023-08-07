@@ -15,7 +15,7 @@ const Content = (props: ContentProps) => {
     >
       <Box
         width={{ base: '100%', sm: '70%' }}
-        marginBottom={{ base: 3, sm: 0 }}
+        marginBottom={{ base: 2, sm: 0 }}
       >
         {MainContent}
       </Box>

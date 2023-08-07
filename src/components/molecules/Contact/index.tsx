@@ -2,11 +2,12 @@ import { IconGitHub, IconTwitter, IconYoutube } from '@/components/atoms/Icons'
 import Text from '@/components/atoms/Text'
 import Box from '@/components/layout/Box'
 import Flex from '@/components/layout/Flex'
+import { Responsive } from '@/utils/styles'
 
 type Alignment = 'start' | 'center' | 'end'
 
 type ContactProps = {
-  alignment?: Alignment
+  alignment?: Responsive<Alignment>
 }
 
 const Contact = (props: ContactProps) => {

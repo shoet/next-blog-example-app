@@ -26,7 +26,7 @@ const About = () => {
       </Box>
       <Content
         MainContent={<Profile />}
-        SubContent={<Contact alignment="end" />}
+        SubContent={<Contact alignment={{ base: 'start', sm: 'end' }} />}
       />
     </>
   )
