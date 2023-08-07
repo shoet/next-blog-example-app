@@ -5,10 +5,12 @@ import Profile from '@/components/molecules/Profile'
 import Contact from '@/components/molecules/Contact'
 import Image from 'next/image'
 import aboutImage from 'images/aboutImage.jpg'
+import Meta from '@/components/templates/Meta'
 
 const About = () => {
   return (
     <>
+      <Meta pageTitle="About" pageDesc="About this blog" />
       <Box marginBottom={3}>
         <Hero title="About" subTitle="About this blog" />
       </Box>

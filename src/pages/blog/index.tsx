@@ -1,9 +1,6 @@
 import Hero from '@/components/organisms/Hero'
 import { GetStaticProps, GetStaticPropsContext, NextPage } from 'next'
-
-// export default function Home() {
-//   return <Hero title="Blog" subTitle="My blog" />
-// }
+import Meta from '@/components/templates/Meta'
 
 type HomePageProps = {}
 
@@ -17,7 +14,12 @@ export const getStaticProps: GetStaticProps<HomePageProps> = (
 }
 
 const Home: NextPage = () => {
-  return <Hero title="Blog" subTitle="My blog" />
+  return (
+    <>
+      <Meta pageTitle="Blog" pageDesc="My blog" />
+      <Hero title="Blog" subTitle="My blog" />
+    </>
+  )
 }
 
 export default Home
