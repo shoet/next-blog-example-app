@@ -61,13 +61,13 @@ const Text = styled.span.withConfig({
       props,
     ),
 })<TextProps>`
-  ${(props) => {
-    if (props.variant && variants[props.variant]) {
+  ${({ variant, fontSize, letterSpacing, theme }) => {
+    if (variant && variants[variant]) {
       const styles = []
-      const style = variants[props.variant]
-      !props.fontSize &&
+      const style = variants[variant]
+      !fontSize &&
         styles.push(toResponsiveValue('font-size', style.fontSize, theme))
-      !props.letterSpacing &&
+      !letterSpacing &&
         styles.push(
           toResponsiveValue('letter-spacing', style.letterSpacing, theme),
         )

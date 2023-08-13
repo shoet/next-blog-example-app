@@ -1,7 +1,7 @@
 import { css, styled } from 'styled-components'
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  isError: boolean
+  isError?: boolean
 }
 
 const Input = styled.input<InputProps>`
