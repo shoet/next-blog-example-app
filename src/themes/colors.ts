@@ -13,6 +13,7 @@ export const colors = {
   text: 'black',
   textDark: 'white',
   gray: '#707070',
+  danger: '#DD2222',
 } as const
 
 export function toDark(colorKey: keyof typeof colors): string {
