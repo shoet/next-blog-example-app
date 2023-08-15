@@ -15,22 +15,27 @@ const variants = {
   extraSmall: {
     fontSize: 'extraSmall',
     letterSpacing: 'extraSmall',
+    color: 'text',
   },
   small: {
     fontSize: 'small',
     letterSpacing: 'small',
+    color: 'text',
   },
   medium: {
     fontSize: 'medium',
     letterSpacing: 'medium',
+    color: 'text',
   },
   large: {
     fontSize: 'large',
     letterSpacing: 'large',
+    color: 'text',
   },
   extraLarge: {
     fontSize: 'extraLarge',
     letterSpacing: 'extraLarge',
+    color: 'text',
   },
 }
 
@@ -61,7 +66,7 @@ const Text = styled.span.withConfig({
       props,
     ),
 })<TextProps>`
-  ${({ variant, fontSize, letterSpacing, theme }) => {
+  ${({ variant, fontSize, letterSpacing, color, theme }) => {
     if (variant && variants[variant]) {
       const styles = []
       const style = variants[variant]
@@ -71,6 +76,7 @@ const Text = styled.span.withConfig({
         styles.push(
           toResponsiveValue('letter-spacing', style.letterSpacing, theme),
         )
+      !color && styles.push(toResponsiveValue('color', style.color, theme))
       return css`${styles.join('\n')}`
     }
   }}

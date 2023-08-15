@@ -1,3 +1,4 @@
+import { toResponsiveValue } from '@/utils/styles'
 import { css, styled } from 'styled-components'
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
@@ -15,9 +16,14 @@ const Input = styled.input<InputProps>`
   color: ${({ theme }) => theme.colors.text};
   height: 38px;
   font-size: 18px;
-  padding: 5px 5px;
+  padding: 5px 10px;
   width: 100%;
   border-radius: 3px;
+
+  &::placeholder {
+      ${({ theme }) => toResponsiveValue('font-size', 'medium', theme)};
+      ${({ theme }) => toResponsiveValue('letter-spacing', 'large', theme)};
+  }
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {

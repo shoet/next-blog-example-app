@@ -136,7 +136,7 @@ const Button = styled.button<ButtonProps>`
 
   border: none;
   outline: none;
-  padding: 10px 20px;
+  padding: 5px 10px;
   font-size: 20px;
   border-radius: 5px;
   cursor: pointer;
