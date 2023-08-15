@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { envVarNotSetMessage } from './error'
 
 const client = axios.create({
   withCredentials: true,
@@ -9,22 +8,12 @@ const client = axios.create({
   },
 })
 
-export type FetchOptions = {
-  baseUrl?: string
-  resource?: string
-  config?: AxiosRequestConfig
-}
-export const fetcher = async ({
-  baseUrl = process.env.NEXT_PUBLIC_API_PROXY_PATH,
-  resource,
-  config = {},
-}: FetchOptions): Promise<any> => {
+export const fetcher = async (
+  url: string,
+  config: AxiosRequestConfig = {},
+): Promise<any> => {
   try {
-    if (process.env.NEXT_PUBLIC_API_PROXY_PATH === undefined) {
-      throw new Error(envVarNotSetMessage('NEXT_PUBLIC_API_PROXY_PATH'))
-    }
-    config.url = `${baseUrl}${resource}`
-    console.log(config)
+    config.url = url
     const response = await client.request(config)
     return response.data
   } catch (err) {

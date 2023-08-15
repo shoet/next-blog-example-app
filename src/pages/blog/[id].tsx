@@ -7,6 +7,7 @@ import {
   NextPage,
 } from 'next'
 import { getBlog, getAllBlogIds } from '@/services/blog'
+import { envVarNotSetMessage } from '@/utils/error'
 
 type BlogContentPageProps = {
   blog: Blog
@@ -20,7 +21,9 @@ export const getStaticProps: GetStaticProps<BlogContentPageProps> = async (
     throw new Error('params is undefined')
   }
   const blogId = Number(params.id)
-  const blog = await getBlog(blogId, { baseUrl: process.env.API_BASE_URL })
+  const baseUrl = process.env.API_BASE_URL
+  if (!baseUrl) throw new Error(envVarNotSetMessage('API_BASE_URL'))
+  const blog = await getBlog(blogId, { apiBaseUrl: baseUrl })
   return {
     props: {
       id: blogId,
@@ -31,7 +34,9 @@ export const getStaticProps: GetStaticProps<BlogContentPageProps> = async (
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const blogIds = await getAllBlogIds({ baseUrl: process.env.API_BASE_URL })
+  const baseUrl = process.env.API_BASE_URL
+  if (!baseUrl) throw new Error(envVarNotSetMessage('API_BASE_URL'))
+  const blogIds = await getAllBlogIds({ apiBaseUrl: baseUrl })
   const paths = blogIds.map((res) => `/blog/${res.id}`)
   return { paths, fallback: false }
 }
