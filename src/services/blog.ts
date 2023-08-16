@@ -1,4 +1,5 @@
-import { FetchOptions, fetcher } from '@/utils/http'
+import { ApiContext } from '@/types/data'
+import { fetcher } from '@/utils/http'
 import { Blog } from '@prisma/client'
 
 export const postBlog = () => {
@@ -10,23 +11,19 @@ export const postBlog = () => {
 
 export const getBlog = async (
   blogId: number,
-  fetchOptions?: FetchOptions,
+  context: ApiContext,
 ): Promise<Blog> => {
-  const blog = await fetcher({
-    ...fetchOptions,
-    resource: `/blog/${blogId}`,
-    config: { method: 'GET' },
+  const blog = await fetcher(`${context.apiBaseUrl}/blog/${blogId}`, {
+    method: 'GET',
   })
   return blog
 }
 
 export const getAllBlogIds = async (
-  fetchOptions?: FetchOptions,
+  context: ApiContext,
 ): Promise<Pick<Blog, 'id'>[]> => {
-  const blogIds = await fetcher({
-    ...fetchOptions,
-    resource: `/blog/ids`,
-    config: { method: 'GET' },
+  const blogIds = await fetcher(`${context.apiBaseUrl}/blog/ids`, {
+    method: 'GET',
   })
   return blogIds
 }
