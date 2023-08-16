@@ -1,4 +1,4 @@
-import { ApiContext } from '@/types/api'
+import { ApiContext } from '@/types/data'
 import { Category } from '@prisma/client'
 import useSWR from 'swr'
 

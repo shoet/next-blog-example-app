@@ -8,7 +8,7 @@ export const signIn = async (
   context: ApiContext,
 ): Promise<User> => {
   const user = await fetcher(`${context.apiBaseUrl}/auth/signin`, {
-    method: 'Post',
+    method: 'POST',
     data: {
       email,
       password,
@@ -17,4 +17,8 @@ export const signIn = async (
   return user
 }
 
-export const signOut = () => {}
+export const signOut = async (context: ApiContext): Promise<void> => {
+  await fetcher(`${context.apiBaseUrl}/auth/signout`, {
+    method: 'POST',
+  })
+}

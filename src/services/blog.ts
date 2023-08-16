@@ -1,4 +1,4 @@
-import { ApiContext } from '@/types/api'
+import { ApiContext } from '@/types/data'
 import { fetcher } from '@/utils/http'
 import { Blog } from '@prisma/client'
 
