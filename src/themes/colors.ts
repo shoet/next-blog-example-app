@@ -1,8 +1,8 @@
 export const colors = {
   primary: '#444444',
-  primaryDark: '',
+  primaryDark: '#222222',
   secondary: '#EEEEEE',
-  secondartDark: '',
+  secondartDark: '#BBBBBB',
   buttonBorder: '',
   buttonBorderDark: '',
   border: '#AAAAAA',
@@ -10,9 +10,12 @@ export const colors = {
   background: '#eeeeee',
   backgroundDark: '#222222',
   accent: '#0d87e0',
-  text: 'black',
+  text: '#555555',
   textDark: 'white',
   gray: '#707070',
+  danger: '#DD2222',
+  dangerDark: '#AA2222',
+  white: '#FFFFFF',
 } as const
 
 export function toDark(colorKey: keyof typeof colors): string {
