@@ -62,9 +62,20 @@ type TextProps = {
 
 const Text = styled.span.withConfig({
   shouldForwardProp: (props) =>
-    !['variant', 'backgroundColor', 'fontSize', 'letterSpacing'].includes(
-      props,
-    ),
+    ![
+      'variant',
+      'backgroundColor',
+      'fontSize',
+      'letterSpacing',
+      'marginTop',
+      'marginRight',
+      'marginBottom',
+      'marginLeft',
+      'paddingTop',
+      'paddingRight',
+      'paddingBottom',
+      'marignLeft',
+    ].includes(props),
 })<TextProps>`
   ${({ variant, fontSize, letterSpacing, color, theme }) => {
     if (variant && variants[variant]) {

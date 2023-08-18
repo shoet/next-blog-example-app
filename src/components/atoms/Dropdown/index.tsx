@@ -78,7 +78,9 @@ export type DropdownOption = {
   value: string
 }
 
-const DropdownRoot = styled.div<{ isError: boolean }>`
+const DropdownRoot = styled.div.withConfig({
+  shouldForwardProp: (props) => !['isError'].includes(props),
+})<{ isError: boolean }>`
   ${({ theme, isError }) => {
     return css`
         border: 1px solid ${
@@ -99,7 +101,9 @@ const DropdownSelected = styled.div`
   padding: 5px 10px;
 `
 
-const DropdownArrowIcon = styled.div<{ isOpen?: boolean; size?: number }>`
+const DropdownArrowIcon = styled.div.withConfig({
+  shouldForwardProp: (props) => !['isOpen'].includes(props),
+})<{ isOpen?: boolean; size?: number }>`
   position: absolute;
   right: 0px;
   top: 50%;
