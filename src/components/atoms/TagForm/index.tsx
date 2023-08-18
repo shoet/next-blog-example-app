@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Input from '../Input'
 import { styled } from 'styled-components'
 import Flex from '@/components/layout/Flex'
+import Badge from '../Badge'
 
 type TagFormProps = {
   onKeyDown: (text: string) => void
@@ -30,9 +31,11 @@ const TagForm = (props: TagFormProps) => {
   return (
     <>
       <TagFormContainer>
-        {tags.map((t, idx) => (
-          <TagItem key={idx}>{t}</TagItem>
-        ))}
+        <TagItems>
+          {tags.map((t, idx) => (
+            <Badge key={idx} label={t} />
+          ))}
+        </TagItems>
         <Input
           value={inputText}
           hasBorder={false}
@@ -53,13 +56,10 @@ const TagFormContainer = styled(Flex)`
   align-items: center;
 `
 
-const TagItem = styled.div`
-  background-color: black;
-  color: white;
-  font-weight: bold;
-  border-radius: 3px;
-  padding: 5px;
-  margin-left: 5px;
+const TagItems = styled.div`
+  & > span {
+    margin-left: 5px;
+  }
 `
 
 export default TagForm
