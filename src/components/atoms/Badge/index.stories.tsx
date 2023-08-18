@@ -15,3 +15,12 @@ Normal.args = {
   backgroundColor: 'black',
   color: 'white',
 }
+
+export const WithClose = Template.bind({})
+WithClose.args = {
+  label: 'Badge',
+  backgroundColor: 'black',
+  color: 'white',
+  isShowClose: true,
+  onClickClose: () => console.log('close click'),
+}
