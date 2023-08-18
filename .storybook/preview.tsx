@@ -3,6 +3,7 @@ import type { Preview } from '@storybook/react'
 import GlobalStyle from '../src/components/templates/GlobalStyle'
 import { ThemeProvider } from 'styled-components'
 import { theme } from '../src/themes'
+import { withConsole, setConsoleOptions } from '@storybook/addon-console'
 
 const preview: Preview = {
   parameters: {
@@ -23,6 +24,7 @@ const preview: Preview = {
         </ThemeProvider>
       </>
     ),
+    (storyFn, context) => withConsole()(storyFn)(context),
   ],
 }
 
