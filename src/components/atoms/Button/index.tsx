@@ -9,6 +9,7 @@ import {
   toResponsiveValue,
 } from '@/utils/styles'
 import css from 'styled-components'
+import { letterSpacings } from '@/themes/letterSpacings'
 
 type ButtonVariant = 'primary' | 'secondary' | 'danger'
 
@@ -76,7 +77,19 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   }
 }
 
-const Button = styled.button<ButtonProps>`
+const Button = styled.button.withConfig({
+  shouldForwardProp: (props) =>
+    ![
+      'paddingTop',
+      'paddingRight',
+      'paddingBottom',
+      'paddingLeft',
+      'marginTop',
+      'marginRight',
+      'marginBottom',
+      'marginLeft',
+    ].includes(props),
+})<ButtonProps>`
   ${({ variant, color, backgroundColor, pseudoClass, theme }) => {
     if (variant && variants[variant]) {
       const styles: string[] = []
@@ -142,6 +155,12 @@ const Button = styled.button<ButtonProps>`
 
 Button.defaultProps = {
   variant: 'primary',
+  paddingTop: '10px',
+  paddingRight: '20px',
+  paddingBottom: '10px',
+  paddingLeft: '20px',
+  fontSize: 'medium',
+  letterSpacing: 'medium',
 }
 
 export default Button
