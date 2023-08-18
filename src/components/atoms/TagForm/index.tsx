@@ -3,63 +3,85 @@ import Input from '../Input'
 import { styled } from 'styled-components'
 import Flex from '@/components/layout/Flex'
 import Badge from '../Badge'
+import Box from '@/components/layout/Box'
 
 type TagFormProps = {
-  onKeyDown: (text: string) => void
+  value: string[]
+  onKeyDown?: (tags: string[]) => void
+  onChange?: (text: string) => void
+  placeholder?: string
 }
-
 const TagForm = (props: TagFormProps) => {
-  const { onKeyDown } = props
+  const { onKeyDown, onChange, placeholder } = props
   const [inputText, setInputText] = useState('')
   const [tags, setTags] = useState<string[]>([])
 
+  // TODO: ハンドラで何をさせるか
+  // TODO: memo化
   const handleKeyDownInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.nativeEvent.isComposing || e.key === 'Enter') {
+    if (e.key === 'Enter') {
       setTags([...tags, inputText])
       setInputText('')
-      onKeyDown && onKeyDown(inputText)
+      onKeyDown && onKeyDown(tags)
     }
-    if (e.nativeEvent.isComposing || e.key === 'Backspace') {
-      if (inputText !== '') {
-        return
-      }
-      tags.splice(tags.length - 1, 1)
-      setTags([...tags])
-    }
+  }
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(e.target.value)
+    onChange && onChange(inputText)
+  }
+
+  const handleOnClick = (idx: number) => {
+    tags.splice(idx, 1)
+    setTags([...tags])
   }
 
   return (
     <>
       <TagFormContainer>
-        <TagItems>
-          {tags.map((t, idx) => (
-            <Badge key={idx} label={t} />
-          ))}
-        </TagItems>
         <Input
           value={inputText}
           hasBorder={false}
           onKeyDown={handleKeyDownInput}
-          onChange={(e) => setInputText(e.target.value)}
+          onChange={handleOnChange}
+          placeholder={placeholder}
         />
       </TagFormContainer>
+      <Box marginTop={1}>
+        <TagItems>
+          {tags.map((t, idx) => (
+            <Badge
+              key={idx}
+              label={t}
+              isShowClose
+              onClickClose={() => handleOnClick(idx)}
+            />
+          ))}
+        </TagItems>
+      </Box>
     </>
   )
 }
 
 const TagFormContainer = styled(Flex)`
   width: 100%;
-  border: 1px solid gray;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 3px;
   flex-direction: row;
   justify-content: start;
   align-items: center;
+  flex-wrap: wrap;
 `
 
-const TagItems = styled.div`
+const TagItems = styled(Flex)`
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
   & > span {
     margin-left: 5px;
+    margin-bottom: 3px;
   }
+  flex-wrap: wrap;
 `
 
 export default TagForm
