@@ -18,12 +18,12 @@ const Dropdown = (props: DropdownProps) => {
   } = props
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
   const [selectedValue, setSelectedValue] = useState<DropdownOption>(value)
+  const dropdownRootRef = useRef<HTMLDivElement | null>(null)
+  const dropdownItemRefs = useRef<(HTMLElement | null)[]>([])
 
   const onClickDropdown = () => {
     setIsOpenDropdown(!isOpenDropdown)
   }
-
-  const dropdownRootRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const dropdown = dropdownRootRef.current
@@ -50,19 +50,33 @@ const Dropdown = (props: DropdownProps) => {
       setIsOpenDropdown(!isOpenDropdown)
     } else if (e.key === 'Escape') {
       setIsOpenDropdown(false)
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (isOpenDropdown) {
+        dropdownItemRefs.current[0]?.focus()
+      }
     }
   }
 
   const handleKeyDownDropdownItem = (
     e: React.KeyboardEvent,
+    index: number,
     item: DropdownOption,
   ) => {
+    e.stopPropagation() // 親(DropdownRoot)でのイベントを無視する
     if (e.key === 'Enter') {
       e.preventDefault()
       setSelectedValue(item)
       setIsOpenDropdown(!isOpenDropdown)
+      dropdownRootRef.current?.focus()
     } else if (e.key === 'Escape') {
       setIsOpenDropdown(false)
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      dropdownItemRefs.current[index + 1]?.focus()
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      dropdownItemRefs.current[index - 1]?.focus()
     }
   }
 
@@ -84,7 +98,7 @@ const Dropdown = (props: DropdownProps) => {
         {isOpenDropdown && (
           <DropdownOptions>
             <ul>
-              {options.map((option) => (
+              {options.map((option, idx) => (
                 <DropdownItem
                   key={option.value}
                   onClick={() => {
@@ -93,7 +107,10 @@ const Dropdown = (props: DropdownProps) => {
                     onChange && onChange(option)
                   }}
                   tabIndex={0}
-                  onKeyDown={(e) => handleKeyDownDropdownItem(e, option)}
+                  onKeyDown={(e) => handleKeyDownDropdownItem(e, idx, option)}
+                  ref={(el) => {
+                    dropdownItemRefs.current[idx] = el
+                  }}
                 >
                   {option.label}
                 </DropdownItem>
