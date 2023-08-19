@@ -2,15 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import { css, styled } from 'styled-components'
 import Text from '../Text'
 
+const DROPDOWN_DEFAULT_OPTION = { label: '-', value: '' }
 type DropdownProps = {
   value?: DropdownOption
   options: DropdownOption[]
-  onChange: (item: DropdownOption) => void
+  onChange?: (item: DropdownOption) => void
   isError?: boolean
 }
 const Dropdown = (props: DropdownProps) => {
   const {
-    value = { label: '-', value: '' },
+    value = DROPDOWN_DEFAULT_OPTION,
     options,
     onChange,
     isError = false,
@@ -31,19 +32,49 @@ const Dropdown = (props: DropdownProps) => {
     }
 
     // 欄外クリック
-    document.addEventListener('click', (e: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (!dropdown.contains(e.target as Node)) {
         // DropdownRootに外側が含まれていない
         setIsOpenDropdown(false)
       }
-    })
+    }
+    document.addEventListener('click', (e) => handleClickOutside(e))
+
+    // cleanup関数
+    return document.removeEventListener('click', handleClickOutside)
   }, [dropdownRootRef])
+
+  const handleKeyDownDropdownRoot = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      setIsOpenDropdown(!isOpenDropdown)
+    } else if (e.key === 'Escape') {
+      setIsOpenDropdown(false)
+    }
+  }
+
+  const handleKeyDownDropdownItem = (
+    e: React.KeyboardEvent,
+    item: DropdownOption,
+  ) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      setSelectedValue(item)
+      setIsOpenDropdown(!isOpenDropdown)
+    } else if (e.key === 'Escape') {
+      setIsOpenDropdown(false)
+    }
+  }
 
   return (
     <DropdownRoot
       onClick={onClickDropdown}
       isError={isError}
       ref={dropdownRootRef}
+      aria-haspopup="true"
+      aria-expanded={isOpenDropdown}
+      tabIndex={0}
+      onKeyDown={handleKeyDownDropdownRoot}
     >
       <DropdownContainer>
         <DropdownSelected>
@@ -53,14 +84,16 @@ const Dropdown = (props: DropdownProps) => {
         {isOpenDropdown && (
           <DropdownOptions>
             <ul>
-              {options.map((option, idx) => (
+              {options.map((option) => (
                 <DropdownItem
-                  key={idx}
+                  key={option.value}
                   onClick={() => {
                     setSelectedValue(option)
                     setIsOpenDropdown(false)
                     onChange && onChange(option)
                   }}
+                  tabIndex={0}
+                  onKeyDown={(e) => handleKeyDownDropdownItem(e, option)}
                 >
                   {option.label}
                 </DropdownItem>
