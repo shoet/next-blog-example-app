@@ -1,8 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
 import { css, styled } from 'styled-components'
 import Text from '../Text'
+import { useDropdown } from './useDropdown'
 
-const DROPDOWN_DEFAULT_OPTION = { label: '-', value: '' }
+export type DropdownOption = {
+  label: string
+  value: string
+}
+const DROPDOWN_DEFAULT_OPTION: DropdownOption = { label: '-', value: '' }
+
 type DropdownProps = {
   value?: DropdownOption
   options: DropdownOption[]
@@ -16,100 +21,50 @@ const Dropdown = (props: DropdownProps) => {
     onChange,
     isError = false,
   } = props
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false)
-  const [selectedValue, setSelectedValue] = useState<DropdownOption>(value)
-  const dropdownRootRef = useRef<HTMLDivElement | null>(null)
-  const dropdownItemRefs = useRef<(HTMLElement | null)[]>([])
 
-  const onClickDropdown = () => {
-    setIsOpenDropdown(!isOpenDropdown)
-  }
-
-  useEffect(() => {
-    const dropdown = dropdownRootRef.current
-    if (!dropdown) {
-      return
-    }
-
-    // 欄外クリック
-    const handleClickOutside = (e: MouseEvent) => {
-      if (!dropdown.contains(e.target as Node)) {
-        // DropdownRootに外側が含まれていない
-        setIsOpenDropdown(false)
-      }
-    }
-    document.addEventListener('click', (e) => handleClickOutside(e))
-
-    // cleanup関数
-    return document.removeEventListener('click', handleClickOutside)
-  }, [dropdownRootRef])
-
-  const handleKeyDownDropdownRoot = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      setIsOpenDropdown(!isOpenDropdown)
-    } else if (e.key === 'Escape') {
-      setIsOpenDropdown(false)
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      if (isOpenDropdown) {
-        dropdownItemRefs.current[0]?.focus()
-      }
-    }
-  }
-
-  const handleKeyDownDropdownItem = (
-    e: React.KeyboardEvent,
-    index: number,
-    item: DropdownOption,
-  ) => {
-    e.stopPropagation() // 親(DropdownRoot)でのイベントを無視する
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      setSelectedValue(item)
-      setIsOpenDropdown(!isOpenDropdown)
-      dropdownRootRef.current?.focus()
-    } else if (e.key === 'Escape') {
-      setIsOpenDropdown(false)
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      dropdownItemRefs.current[index + 1]?.focus()
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      dropdownItemRefs.current[index - 1]?.focus()
-    }
-  }
+  const {
+    isOpen,
+    selectedValue,
+    dropdownRootRef,
+    dropdownItemRefs,
+    openDropdown,
+    openDropdownByKeyboard,
+    selectDropdownItem,
+    selectDropdownItemByKeyboard,
+  } = useDropdown(value)
 
   return (
     <DropdownRoot
-      onClick={onClickDropdown}
-      isError={isError}
       ref={dropdownRootRef}
+      isError={isError}
       aria-haspopup="true"
-      aria-expanded={isOpenDropdown}
+      aria-expanded={isOpen}
       tabIndex={0}
-      onKeyDown={handleKeyDownDropdownRoot}
+      onClick={openDropdown}
+      onKeyDown={openDropdownByKeyboard}
     >
       <DropdownContainer>
         <DropdownSelected>
           <Text variant="medium">{selectedValue.label}</Text>
         </DropdownSelected>
-        <DropdownArrowIcon isOpen={isOpenDropdown} size={5} />
-        {isOpenDropdown && (
+        <DropdownArrowIcon isOpen={isOpen} size={5} />
+        {isOpen && (
           <DropdownOptions>
             <ul>
               {options.map((option, idx) => (
                 <DropdownItem
                   key={option.value}
-                  onClick={() => {
-                    setSelectedValue(option)
-                    setIsOpenDropdown(false)
-                    onChange && onChange(option)
-                  }}
-                  tabIndex={0}
-                  onKeyDown={(e) => handleKeyDownDropdownItem(e, idx, option)}
                   ref={(el) => {
                     dropdownItemRefs.current[idx] = el
+                  }}
+                  tabIndex={0}
+                  onClick={() => {
+                    selectDropdownItem(option)
+                    onChange && onChange(option)
+                  }}
+                  onKeyDown={(e) => {
+                    selectDropdownItemByKeyboard(e, idx, option)
+                    onChange && onChange(option)
                   }}
                 >
                   {option.label}
@@ -121,11 +76,6 @@ const Dropdown = (props: DropdownProps) => {
       </DropdownContainer>
     </DropdownRoot>
   )
-}
-
-export type DropdownOption = {
-  label: string
-  value: string
 }
 
 const DropdownRoot = styled.div.withConfig({
