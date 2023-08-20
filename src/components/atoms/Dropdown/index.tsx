@@ -6,7 +6,10 @@ export type DropdownOption = {
   label: string
   value: string
 }
-const DROPDOWN_DEFAULT_OPTION: DropdownOption = { label: '-', value: '' }
+export const DROPDOWN_DEFAULT_OPTION: DropdownOption = {
+  label: '-',
+  value: '0',
+}
 
 type DropdownProps = {
   value?: DropdownOption

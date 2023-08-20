@@ -4,7 +4,10 @@ import Text from '@/components/atoms/Text'
 import Box from '@/components/layout/Box'
 import { Controller, useForm } from 'react-hook-form'
 import { useCategory } from '@/services/category'
-import Dropdown, { DropdownOption } from '@/components/atoms/Dropdown'
+import Dropdown, {
+  DROPDOWN_DEFAULT_OPTION,
+  DropdownOption,
+} from '@/components/atoms/Dropdown'
 import { useEffect, useState } from 'react'
 import TagForm from '@/components/atoms/TagForm'
 import { useAuthUserContext } from '@/context/AuthUserContext'
@@ -12,6 +15,7 @@ import { useRouter } from 'next/router'
 import TextArea from '@/components/atoms/TextArea'
 import Flex from '@/components/layout/Flex'
 import CheckBox from '@/components/atoms/CheckBox'
+import { useBlogStatus } from '@/services/blog-status'
 
 type BlogFormData = {
   title: string
@@ -26,25 +30,29 @@ type BlogFormData = {
 
 const BlogForm = () => {
   // TOOD: fetch status
-  const {
-    categories,
-    isLoading: isLoadingCategory,
-    error: errorCategory,
-    mutate: mutateCategory,
-  } = useCategory({ apiBaseUrl: process.env.NEXT_PUBLIC_API_PROXY_PATH || '' })
+  const { categories, isLoading: isLoadingCategory } = useCategory({
+    apiBaseUrl: process.env.NEXT_PUBLIC_API_PROXY_PATH || '',
+  })
 
+  const { blogStatuses, isLoading: isLoadingBlogStatuses } = useBlogStatus({
+    apiBaseUrl: process.env.NEXT_PUBLIC_API_PROXY_PATH || '',
+  })
+
+  const { user } = useAuthUserContext()
   // TOOD: dropzone
-  // TODO: tag form
 
   const {
     control,
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<BlogFormData>()
 
   const [dropdownOptionsCategory, setDropdownOptionsCategory] = useState<
+    DropdownOption[]
+  >([])
+
+  const [dropdownOptionsBlogStatus, setDropdownOptionsBlogStatus] = useState<
     DropdownOption[]
   >([])
 
@@ -53,10 +61,27 @@ const BlogForm = () => {
       label: c.name,
       value: String(c.id),
     }))
-    setDropdownOptionsCategory([{ label: '-', value: '' }, ...fetchedCategory])
+    setDropdownOptionsCategory([DROPDOWN_DEFAULT_OPTION, ...fetchedCategory])
   }, [categories, isLoadingCategory])
 
+  useEffect(() => {
+    const fetchedBlogStatus: DropdownOption[] = blogStatuses.map((c) => ({
+      label: c.name,
+      value: String(c.id),
+    }))
+    setDropdownOptionsBlogStatus([
+      DROPDOWN_DEFAULT_OPTION,
+      ...fetchedBlogStatus,
+    ])
+  }, [blogStatuses, isLoadingBlogStatuses])
+
+  const router = useRouter()
   const onSubmit = (data: BlogFormData) => {
+    if (user === undefined) {
+      router.push('/auth/signin')
+      return
+    }
+    data.authorId = user.id
     console.log(data)
   }
 
@@ -107,9 +132,16 @@ const BlogForm = () => {
               Category
             </Text>
           </Box>
+          {/* TODO: デフォルト0で良いのか */}
           <Controller
             control={control}
             name="categoryId"
+            rules={{
+              validate: (value) => {
+                return value !== 0 || 'カテゴリを選択して下さい。'
+              },
+            }}
+            defaultValue={Number(DROPDOWN_DEFAULT_OPTION.value)}
             render={({ field: { onChange, value } }) => (
               <>
                 <Dropdown
@@ -140,7 +172,6 @@ const BlogForm = () => {
             name="tags"
             rules={{
               validate: (value) =>
-                value.length <= 5 || '作成できるタグは5つまでです。',
                 (value && value.length <= 5) || '作成できるタグは5つまでです。',
             }}
             render={({ field: { value, onChange }, formState: { errors } }) => (
@@ -178,6 +209,41 @@ const BlogForm = () => {
               {errors.content.message}
             </Text>
           )}
+        </Box>
+        <Box paddingBottom={2}>
+          <Box paddingBottom={1}>
+            <Text as="label" variant="medium" marginBottom={3}>
+              Status
+            </Text>
+          </Box>
+          {/* TODO: デフォルト0で良いのか */}
+          <Controller
+            control={control}
+            name="statusId"
+            rules={{
+              validate: (value) => {
+                console.log(value)
+                return value !== 0 || 'ステータスを選択して下さい。'
+              },
+            }}
+            defaultValue={Number(DROPDOWN_DEFAULT_OPTION.value)}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <Dropdown
+                  value={dropdownOptionsBlogStatus.find(
+                    (o) => Number(o.value) === value,
+                  )}
+                  options={dropdownOptionsBlogStatus}
+                  onChange={(item: DropdownOption) => onChange(item.value)}
+                />
+                {errors.statusId && (
+                  <Text as="label" variant="small" color="danger">
+                    {errors.statusId.message}
+                  </Text>
+                )}
+              </>
+            )}
+          />
         </Box>
       </Box>
       <Flex flexDirection="row" justifyContent="end" alignItems="center">
