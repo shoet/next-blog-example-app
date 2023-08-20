@@ -20,9 +20,13 @@ const TagForm = (props: TagFormProps) => {
   // TODO: memo化
   const handleKeyDownInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setTags([...tags, inputText])
+      if (tags.includes(inputText)) {
+        return
+      }
+      const newTags = [...tags, inputText]
+      setTags(newTags)
       setInputText('')
-      onKeyDown && onKeyDown(tags)
+      onKeyDown && onKeyDown(newTags)
     }
   }
 
