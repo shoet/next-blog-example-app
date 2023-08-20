@@ -7,6 +7,11 @@ import { useCategory } from '@/services/category'
 import Dropdown, { DropdownOption } from '@/components/atoms/Dropdown'
 import { useEffect, useState } from 'react'
 import TagForm from '@/components/atoms/TagForm'
+import { useAuthUserContext } from '@/context/AuthUserContext'
+import { useRouter } from 'next/router'
+import TextArea from '@/components/atoms/TextArea'
+import Flex from '@/components/layout/Flex'
+import CheckBox from '@/components/atoms/CheckBox'
 
 type BlogFormData = {
   title: string
@@ -130,11 +135,13 @@ const BlogForm = () => {
             </Text>
           </Box>
           <Controller
+            defaultValue={[]}
             control={control}
             name="tags"
             rules={{
               validate: (value) =>
                 value.length <= 5 || '作成できるタグは5つまでです。',
+                (value && value.length <= 5) || '作成できるタグは5つまでです。',
             }}
             render={({ field: { value, onChange }, formState: { errors } }) => (
               <>
@@ -152,10 +159,40 @@ const BlogForm = () => {
             )}
           />
         </Box>
+        <Box paddingBottom={2}>
+          <Box paddingBottom={1}>
+            <Text as="label" variant="medium" marginBottom={3}>
+              Content
+            </Text>
+          </Box>
+          <Controller
+            control={control}
+            name="content"
+            rules={{ required: '本文は必須です。' }}
+            render={({ field: { value, onChange } }) => {
+              return <TextArea value={value} onChange={onChange} minRows={5} />
+            }}
+          />
+          {errors.content && (
+            <Text as="label" variant="small" color="danger">
+              {errors.content.message}
+            </Text>
+          )}
+        </Box>
       </Box>
-      <Button variant="primary" type="button" onClick={handleSubmit(onSubmit)}>
-        Post
-      </Button>
+      <Flex flexDirection="row" justifyContent="end" alignItems="center">
+        <Flex marginRight={3} alignItems="center">
+          <CheckBox {...register('publish')} name="publish" type="checkbox" />
+          <Text as="label">公開する</Text>
+        </Flex>
+        <Button
+          variant="primary"
+          type="button"
+          onClick={handleSubmit(onSubmit)}
+        >
+          Post
+        </Button>
+      </Flex>
     </form>
   )
 }
