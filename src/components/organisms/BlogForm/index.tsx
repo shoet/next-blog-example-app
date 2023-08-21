@@ -17,8 +17,10 @@ import Flex from '@/components/layout/Flex'
 import CheckBox from '@/components/atoms/CheckBox'
 import { useBlogStatus } from '@/services/blog-status'
 import Dropzone from '@/components/atoms/Dropzone'
+import { postBlog } from '@/services/blog'
+import { envVarNotSetMessage } from '@/utils/error'
 
-type BlogFormData = {
+export type BlogFormData = {
   title: string
   categoryId: number
   slug: string
@@ -31,7 +33,6 @@ type BlogFormData = {
 }
 
 const BlogForm = () => {
-  // TOOD: fetch status
   const { categories, isLoading: isLoadingCategory } = useCategory({
     apiBaseUrl: process.env.NEXT_PUBLIC_API_PROXY_PATH || '',
   })
@@ -78,13 +79,19 @@ const BlogForm = () => {
   }, [blogStatuses, isLoadingBlogStatuses])
 
   const router = useRouter()
-  const onSubmit = (data: BlogFormData) => {
+  const onSubmit = async (data: BlogFormData) => {
     if (user === undefined) {
       router.push('/auth/signin')
       return
     }
     data.authorId = user.id
-    console.log(data)
+    // TODO: image url
+    const baseUrl = process.env.NEXT_PUBLIC_API_PROXY_PATH
+    if (!baseUrl) {
+      throw new Error(envVarNotSetMessage('NEXT_PUBLIC_API_PROXY_PATH'))
+    }
+    await postBlog({ apiBaseUrl: baseUrl || '' }, data)
+    router.push('/blog')
   }
 
   return (
@@ -204,7 +211,13 @@ const BlogForm = () => {
             name="content"
             rules={{ required: '本文は必須です。' }}
             render={({ field: { value, onChange } }) => {
-              return <TextArea value={value} onChange={onChange} minRows={5} />
+              return (
+                <TextArea
+                  value={value}
+                  onChange={(text) => onChange(text)}
+                  minRows={5}
+                />
+              )
             }}
           />
           {errors.content && (
@@ -284,7 +297,24 @@ const BlogForm = () => {
       </Box>
       <Flex flexDirection="row" justifyContent="end" alignItems="center">
         <Flex marginRight={3} alignItems="center">
-          <CheckBox {...register('publish')} name="publish" type="checkbox" />
+          <Controller
+            control={control}
+            defaultValue={false}
+            name="publish"
+            render={({ field: { value, onChange } }) => {
+              return (
+                <CheckBox
+                  name="publish"
+                  type="checkbox"
+                  checked={value}
+                  onChange={(value) => {
+                    console.log(value)
+                    onChange(value)
+                  }}
+                />
+              )
+            }}
+          />
           <Text as="label">公開する</Text>
         </Flex>
         <Button
