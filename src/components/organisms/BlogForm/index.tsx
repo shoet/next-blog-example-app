@@ -2,7 +2,7 @@ import Button from '@/components/atoms/Button'
 import Input from '@/components/atoms/Input'
 import Text from '@/components/atoms/Text'
 import Box from '@/components/layout/Box'
-import { Controller, set, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useCategory } from '@/services/category'
 import Dropdown, {
   DROPDOWN_DEFAULT_OPTION,
