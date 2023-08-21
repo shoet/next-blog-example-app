@@ -2,7 +2,7 @@ import Button from '@/components/atoms/Button'
 import Input from '@/components/atoms/Input'
 import Text from '@/components/atoms/Text'
 import Box from '@/components/layout/Box'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, set, useForm } from 'react-hook-form'
 import { useCategory } from '@/services/category'
 import Dropdown, {
   DROPDOWN_DEFAULT_OPTION,
@@ -16,6 +16,7 @@ import TextArea from '@/components/atoms/TextArea'
 import Flex from '@/components/layout/Flex'
 import CheckBox from '@/components/atoms/CheckBox'
 import { useBlogStatus } from '@/services/blog-status'
+import Dropzone from '@/components/atoms/Dropzone'
 
 type BlogFormData = {
   title: string
@@ -25,6 +26,7 @@ type BlogFormData = {
   authorId: number
   publish: boolean
   statusId: number
+  eyeCatchImage?: string
   tags: string[]
 }
 
@@ -39,7 +41,7 @@ const BlogForm = () => {
   })
 
   const { user } = useAuthUserContext()
-  // TOOD: dropzone
+  const [imageFiles, setImageFiles] = useState<File[]>([])
 
   const {
     control,
@@ -88,6 +90,7 @@ const BlogForm = () => {
   return (
     <form>
       <Box>
+        {/* TODO: 画像プレビューをカルーセルにする */}
         <Box paddingBottom={2}>
           <Box paddingBottom={1}>
             <Text as="label" variant="medium" marginBottom={3}>
@@ -239,6 +242,39 @@ const BlogForm = () => {
                 {errors.statusId && (
                   <Text as="label" variant="small" color="danger">
                     {errors.statusId.message}
+                  </Text>
+                )}
+              </>
+            )}
+          />
+        </Box>
+        <Box paddingBottom={2}>
+          <Box paddingBottom={1}>
+            <Text as="label" variant="medium" marginBottom={3}>
+              EyeCatchImage
+            </Text>
+          </Box>
+          {/* TODO: 改善 revokeURL */}
+          <Controller
+            control={control}
+            name="eyeCatchImage"
+            rules={{}}
+            render={({ field: { onChange: onChangeEyeCatchImage } }) => (
+              <>
+                <Dropzone
+                  value={imageFiles}
+                  onChange={(files) => {
+                    if (files.length > 1) {
+                      window.alert('アップロードできるファイルは1つです。')
+                      return
+                    }
+                    const url = URL.createObjectURL(files[0])
+                    onChangeEyeCatchImage(url)
+                  }}
+                />
+                {errors.eyeCatchImage && (
+                  <Text as="label" variant="small" color="danger">
+                    {errors.eyeCatchImage.message}
                   </Text>
                 )}
               </>
