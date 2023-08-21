@@ -6,7 +6,9 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   hasBorder?: boolean
 }
 
-const Input = styled.input<InputProps>`
+const Input = styled.input.withConfig({
+  shouldForwardProp: (props) => !['isError', 'hasBorder'].includes(props),
+})<InputProps>`
   ${({ theme, hasBorder = true, isError = false }) => {
     if (hasBorder) {
       return css`
@@ -31,6 +33,7 @@ const Input = styled.input<InputProps>`
   &::placeholder {
       ${({ theme }) => toResponsiveValue('font-size', 'medium', theme)};
       ${({ theme }) => toResponsiveValue('letter-spacing', 'large', theme)};
+      ${({ theme }) => toResponsiveValue('color', 'placeholder', theme)};
   }
 
   &::-webkit-outer-spin-button,

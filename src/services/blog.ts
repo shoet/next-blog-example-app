@@ -1,12 +1,14 @@
+import { BlogFormData } from '@/components/organisms/BlogForm'
 import { ApiContext } from '@/types/data'
 import { fetcher } from '@/utils/http'
 import { Blog } from '@prisma/client'
 
-export const postBlog = () => {
-  // TODO: title, slug, category, tag, body(markdown)
-  // api: /blog/new
-  // TODO: save image
-  // api: /image/public/new
+export const postBlog = async (context: ApiContext, data: BlogFormData) => {
+  const blog = await fetcher(`${context.apiBaseUrl}/blog`, {
+    method: 'POST',
+    data: data,
+  })
+  return blog
 }
 
 export const getBlog = async (

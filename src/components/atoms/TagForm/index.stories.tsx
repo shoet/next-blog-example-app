@@ -8,7 +8,11 @@ export default {
 } as Meta<typeof TagForm>
 
 const Template: StoryFn<typeof TagForm> = (args) => (
-  <TagForm onKeyDown={(text) => console.log(text)} />
+  <TagForm
+    value={[]}
+    onKeyDown={(tags) => console.log(tags)}
+    placeholder="Tags"
+  />
 )
 
 export const Normal = Template.bind({})

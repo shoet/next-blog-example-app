@@ -16,6 +16,7 @@ export const colors = {
   danger: '#DD2222',
   dangerDark: '#AA2222',
   white: '#FFFFFF',
+  placeholder: '#999999',
 } as const
 
 export function toDark(colorKey: keyof typeof colors): string {

@@ -1,64 +1,72 @@
-import { useEffect, useRef, useState } from 'react'
 import { css, styled } from 'styled-components'
 import Text from '../Text'
+import { useDropdown } from './useDropdown'
+
+export type DropdownOption = {
+  label: string
+  value: string
+}
+export const DROPDOWN_DEFAULT_OPTION: DropdownOption = {
+  label: '-',
+  value: '0',
+}
 
 type DropdownProps = {
   value?: DropdownOption
   options: DropdownOption[]
-  onChange: (item: DropdownOption) => void
+  onChange?: (item: DropdownOption) => void
   isError?: boolean
 }
 const Dropdown = (props: DropdownProps) => {
   const {
-    value = { label: '-', value: '' },
+    value = DROPDOWN_DEFAULT_OPTION,
     options,
     onChange,
     isError = false,
   } = props
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false)
-  const [selectedValue, setSelectedValue] = useState<DropdownOption>(value)
 
-  const onClickDropdown = () => {
-    setIsOpenDropdown(!isOpenDropdown)
-  }
-
-  const dropdownRootRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    const dropdown = dropdownRootRef.current
-    if (!dropdown) {
-      return
-    }
-
-    // 欄外クリック
-    document.addEventListener('click', (e: MouseEvent) => {
-      if (!dropdown.contains(e.target as Node)) {
-        // DropdownRootに外側が含まれていない
-        setIsOpenDropdown(false)
-      }
-    })
-  }, [dropdownRootRef])
+  const {
+    isOpen,
+    selectedValue,
+    dropdownRootRef,
+    dropdownItemRefs,
+    openDropdown,
+    openDropdownByKeyboard,
+    selectDropdownItem,
+    selectDropdownItemByKeyboard,
+  } = useDropdown(value)
 
   return (
     <DropdownRoot
-      onClick={onClickDropdown}
-      isError={isError}
       ref={dropdownRootRef}
+      isError={isError}
+      aria-haspopup="true"
+      aria-expanded={isOpen}
+      tabIndex={0}
+      onClick={openDropdown}
+      onKeyDown={openDropdownByKeyboard}
     >
       <DropdownContainer>
         <DropdownSelected>
           <Text variant="medium">{selectedValue.label}</Text>
         </DropdownSelected>
-        <DropdownArrowIcon isOpen={isOpenDropdown} size={5} />
-        {isOpenDropdown && (
+        <DropdownArrowIcon isOpen={isOpen} size={5} />
+        {isOpen && (
           <DropdownOptions>
             <ul>
               {options.map((option, idx) => (
                 <DropdownItem
-                  key={idx}
+                  key={option.value}
+                  ref={(el) => {
+                    dropdownItemRefs.current[idx] = el
+                  }}
+                  tabIndex={0}
                   onClick={() => {
-                    setSelectedValue(option)
-                    setIsOpenDropdown(false)
+                    selectDropdownItem(option)
+                    onChange && onChange(option)
+                  }}
+                  onKeyDown={(e) => {
+                    selectDropdownItemByKeyboard(e, idx, option)
                     onChange && onChange(option)
                   }}
                 >
@@ -73,12 +81,9 @@ const Dropdown = (props: DropdownProps) => {
   )
 }
 
-export type DropdownOption = {
-  label: string
-  value: string
-}
-
-const DropdownRoot = styled.div<{ isError: boolean }>`
+const DropdownRoot = styled.div.withConfig({
+  shouldForwardProp: (props) => !['isError'].includes(props),
+})<{ isError: boolean }>`
   ${({ theme, isError }) => {
     return css`
         border: 1px solid ${
@@ -99,7 +104,9 @@ const DropdownSelected = styled.div`
   padding: 5px 10px;
 `
 
-const DropdownArrowIcon = styled.div<{ isOpen?: boolean; size?: number }>`
+const DropdownArrowIcon = styled.div.withConfig({
+  shouldForwardProp: (props) => !['isOpen'].includes(props),
+})<{ isOpen?: boolean; size?: number }>`
   position: absolute;
   right: 0px;
   top: 50%;
