@@ -278,13 +278,18 @@ const BlogForm = () => {
                   value={imageFiles}
                   onChange={(files) => {
                     if (files.length > 1) {
-                      window.alert('アップロードできるファイルは1つです。')
+                      control.setError('eyeCatchImage', {
+                        message: 'アップロードできるファイルは1つです。',
+                      })
                       return
                     }
+                    // TODO: destract files
                     const url = URL.createObjectURL(files[0])
                     onChangeEyeCatchImage(url)
                   }}
-                />
+                >
+                  Dropzone
+                </Dropzone>
                 {errors.eyeCatchImage && (
                   <Text as="label" variant="small" color="danger">
                     {errors.eyeCatchImage.message}
