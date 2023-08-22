@@ -1,7 +1,8 @@
 import Flex from '@/components/layout/Flex'
-import { styled } from 'styled-components'
-import Input from '../Input'
-import { useRef, useState } from 'react'
+import styled from 'styled-components'
+import { PropsWithChildren, useRef, useState } from 'react'
+import Text from '../Text'
+import Box from '@/components/layout/Box'
 
 const ACCEPT_FILE_TYPES_DEFAULT = [
   'image/jpeg',
@@ -11,65 +12,70 @@ const ACCEPT_FILE_TYPES_DEFAULT = [
 ]
 
 type DropzoneProps = {
-  value: File[]
+  value?: File[]
   onChange?: (value: File[]) => void
-  onDrag?: (value: File[]) => void
   isError?: boolean
   acceptFileTypes?: string[]
 }
-// TODO: destract files
-const Dropzone = (props: DropzoneProps) => {
+const Dropzone = (props: PropsWithChildren<DropzoneProps>) => {
   const {
     value = [],
     onChange,
-    isError = false,
+    isError: isErrorInit = false,
     acceptFileTypes = ACCEPT_FILE_TYPES_DEFAULT,
+    children,
   } = props
 
-  const [files, setFiles] = useState<File[]>(value)
+  const [isError, setIsError] = useState(isErrorInit)
+  const [errorMessages, setErrorMessages] = useState<string[]>([])
+
+  function checkFileTypes(files: File[] | FileList, acceptFileTypes: string[]) {
+    const validFiles = []
+    const inValidFiles = []
+
+    for (let i = 0, numFiles = files.length; i < numFiles; i++) {
+      if (!acceptFileTypes.includes(files[i].type)) {
+        inValidFiles.push(files[i])
+      } else {
+        validFiles.push(files[i])
+      }
+    }
+    return { valid: validFiles, invalid: inValidFiles }
+  }
+
+  const fileTypeErrorMessage = (file: File) =>
+    `無効なファイル形式です。[${file.name}: ${file.type}]`
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrorMessages([])
     if (e.target.files) {
       const files = e.target.files
-      const newFiles = []
-      if (files) {
-        for (let i = 0, numFiles = files.length; i < numFiles; i++) {
-          if (!acceptFileTypes.includes(files[i].type)) {
-            window.alert(
-              `サポートされていないファイル形式です。[${files[i].name}, ${files[i].type}]`,
-            )
-            return
-          }
-          newFiles.push(files[i])
-        }
+      const { valid, invalid } = checkFileTypes(files, acceptFileTypes)
+      if (invalid.length > 0) {
+        setIsError(true)
+        setErrorMessages(invalid.map((f) => fileTypeErrorMessage(f)))
       }
-      onChange && onChange(newFiles)
+      onChange && onChange(valid)
     }
   }
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    const files = e.dataTransfer.files
-    const newFiles = []
-    if (files) {
-      for (let i = 0, fileLength = files.length; i < fileLength; i++) {
-        if (!acceptFileTypes.includes(files[i].type)) {
-          window.alert(
-            `サポートされていないファイル形式です。[${files[i].name}, ${files[i].type}]`,
-          )
-          return
-        }
-        newFiles.push(files[i])
+    setErrorMessages([])
+    if (e.dataTransfer.files) {
+      const files = e.dataTransfer.files
+      const { valid, invalid } = checkFileTypes(files, acceptFileTypes)
+      if (invalid.length > 0) {
+        setIsError(true)
+        setErrorMessages(invalid.map((f) => fileTypeErrorMessage(f)))
       }
+      onChange && onChange(valid)
     }
-    setFiles(newFiles)
-    onChange && onChange(newFiles)
   }
 
   const onDragOver = (e: React.DragEvent) => {
     e.preventDefault()
-    e.stopPropagation()
   }
 
   const hiddenInputRef = useRef<HTMLInputElement>(null)
@@ -87,16 +93,25 @@ const Dropzone = (props: DropzoneProps) => {
         onDrop={onDrop}
         onDragOver={onDragOver}
       >
-        Dropzone
+        {children || 'ファイルをドロップまたはクリックして下さい'}
         <input
           type="file"
           multiple
           hidden
-          accept={ACCEPT_FILE_TYPES_DEFAULT.join(',')}
+          accept={acceptFileTypes.join(',')}
           onChange={onChangeInput}
           ref={hiddenInputRef}
         />
       </DropzoneContainer>
+      {isError &&
+        errorMessages.length > 0 &&
+        errorMessages.map((m, idx) => (
+          <Box key={idx}>
+            <Text as="label" variant="small" color="danger">
+              {m}
+            </Text>
+          </Box>
+        ))}
     </>
   )
 }
