@@ -1,8 +1,9 @@
 import Flex from '@/components/layout/Flex'
 import styled from 'styled-components'
-import { PropsWithChildren, useRef, useState } from 'react'
+import { PropsWithChildren } from 'react'
 import Text from '../Text'
 import Box from '@/components/layout/Box'
+import { useDropzone } from './useDropzone'
 
 const ACCEPT_FILE_TYPES_DEFAULT = [
   'image/jpeg',
@@ -19,79 +20,29 @@ type DropzoneProps = {
 }
 const Dropzone = (props: PropsWithChildren<DropzoneProps>) => {
   const {
-    value = [],
     onChange,
     isError: isErrorInit = false,
     acceptFileTypes = ACCEPT_FILE_TYPES_DEFAULT,
     children,
   } = props
 
-  const [isError, setIsError] = useState(isErrorInit)
-  const [errorMessages, setErrorMessages] = useState<string[]>([])
-
-  function checkFileTypes(files: File[] | FileList, acceptFileTypes: string[]) {
-    const validFiles = []
-    const inValidFiles = []
-
-    for (let i = 0, numFiles = files.length; i < numFiles; i++) {
-      if (!acceptFileTypes.includes(files[i].type)) {
-        inValidFiles.push(files[i])
-      } else {
-        validFiles.push(files[i])
-      }
-    }
-    return { valid: validFiles, invalid: inValidFiles }
-  }
-
-  const fileTypeErrorMessage = (file: File) =>
-    `無効なファイル形式です。[${file.name}: ${file.type}]`
-
-  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrorMessages([])
-    if (e.target.files) {
-      const files = e.target.files
-      const { valid, invalid } = checkFileTypes(files, acceptFileTypes)
-      if (invalid.length > 0) {
-        setIsError(true)
-        setErrorMessages(invalid.map((f) => fileTypeErrorMessage(f)))
-      }
-      onChange && onChange(valid)
-    }
-  }
-
-  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setErrorMessages([])
-    if (e.dataTransfer.files) {
-      const files = e.dataTransfer.files
-      const { valid, invalid } = checkFileTypes(files, acceptFileTypes)
-      if (invalid.length > 0) {
-        setIsError(true)
-        setErrorMessages(invalid.map((f) => fileTypeErrorMessage(f)))
-      }
-      onChange && onChange(valid)
-    }
-  }
-
-  const onDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-  }
-
-  const hiddenInputRef = useRef<HTMLInputElement>(null)
-  const openHiddenInputDialog = () => {
-    if (hiddenInputRef.current) {
-      hiddenInputRef.current.click()
-    }
-  }
+  const {
+    isError,
+    errorMessages,
+    openFileDialog,
+    selectFile,
+    dropFile,
+    dragOver,
+    inputRef,
+  } = useDropzone({ isError: isErrorInit, onChange, acceptFileTypes })
 
   return (
     <>
       <DropzoneContainer
         isError={isError}
-        onClick={openHiddenInputDialog}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
+        onClick={openFileDialog}
+        onDrop={dropFile}
+        onDragOver={dragOver}
       >
         {children || 'ファイルをドロップまたはクリックして下さい'}
         <input
@@ -99,8 +50,8 @@ const Dropzone = (props: PropsWithChildren<DropzoneProps>) => {
           multiple
           hidden
           accept={acceptFileTypes.join(',')}
-          onChange={onChangeInput}
-          ref={hiddenInputRef}
+          onChange={selectFile}
+          ref={inputRef}
         />
       </DropzoneContainer>
       {isError &&
