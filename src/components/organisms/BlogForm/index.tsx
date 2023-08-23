@@ -19,6 +19,7 @@ import { useBlogStatus } from '@/services/blog-status'
 import Dropzone from '@/components/atoms/Dropzone'
 import { postBlog } from '@/services/blog'
 import { envVarNotSetMessage } from '@/utils/error'
+import { uploadFile, useUploadUrl } from '@/services/storage'
 
 export type BlogFormData = {
   title: string
@@ -43,6 +44,14 @@ const BlogForm = () => {
 
   const { user } = useAuthUserContext()
   const [imageFiles, setImageFiles] = useState<File[]>([])
+  const {
+    url: generatedUrl,
+    mutate: generateUrl,
+    isLoading: isLoadingGenerateUrl,
+    error: errorGenerateUrl,
+  } = useUploadUrl({
+    apiBaseUrl: process.env.NEXT_PUBLIC_API_PROXY_PATH || '',
+  })
 
   const {
     control,
@@ -85,6 +94,20 @@ const BlogForm = () => {
       return
     }
     data.authorId = user.id
+    if (generatedUrl) {
+      try {
+        await uploadFile(
+          generatedUrl,
+          imageFiles[0],
+          'application/octet-stream',
+        )
+      } catch (err) {
+        control.setError('eyeCatchImage', {
+          message: '画像のアップロードに失敗しました。',
+        })
+        return
+      }
+    }
     // TODO: image url
     const baseUrl = process.env.NEXT_PUBLIC_API_PROXY_PATH
     if (!baseUrl) {
@@ -238,7 +261,6 @@ const BlogForm = () => {
             name="statusId"
             rules={{
               validate: (value) => {
-                console.log(value)
                 return value !== 0 || 'ステータスを選択して下さい。'
               },
             }}
@@ -271,7 +293,6 @@ const BlogForm = () => {
           <Controller
             control={control}
             name="eyeCatchImage"
-            rules={{}}
             render={({ field: { onChange: onChangeEyeCatchImage } }) => (
               <>
                 <Dropzone
@@ -285,10 +306,17 @@ const BlogForm = () => {
                     }
                     // TODO: destract files
                     const url = URL.createObjectURL(files[0])
+                    setImageFiles([files[0]])
+                    // TODO: rename
+                    generateUrl(files[0].name, 'application/octet-stream')
                     onChangeEyeCatchImage(url)
                   }}
                 >
-                  Dropzone
+                  <Flex flexWrap="wrap">
+                    <Text>
+                      {isLoadingGenerateUrl ? 'loading' : generatedUrl}
+                    </Text>
+                  </Flex>
                 </Dropzone>
                 {errors.eyeCatchImage && (
                   <Text as="label" variant="small" color="danger">
@@ -312,10 +340,7 @@ const BlogForm = () => {
                   name="publish"
                   type="checkbox"
                   checked={value}
-                  onChange={(value) => {
-                    console.log(value)
-                    onChange(value)
-                  }}
+                  onChange={onChange}
                 />
               )
             }}
