@@ -29,7 +29,7 @@ export type BlogFormData = {
   authorId: number
   publish: boolean
   statusId: number
-  eyeCatchImage?: string
+  eyeCatchImgUrl?: string
   tags: string[]
 }
 
@@ -45,7 +45,7 @@ const BlogForm = () => {
   const { user } = useAuthUserContext()
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const {
-    url: generatedUrl,
+    data: uploadUrlData,
     mutate: generateUrl,
     isLoading: isLoadingGenerateUrl,
     error: errorGenerateUrl,
@@ -94,21 +94,17 @@ const BlogForm = () => {
       return
     }
     data.authorId = user.id
-    if (generatedUrl) {
+    if (uploadUrlData) {
       try {
-        await uploadFile(
-          generatedUrl,
-          imageFiles[0],
-          'application/octet-stream',
-        )
+        await uploadFile(uploadUrlData.url, imageFiles[0], 'image/*')
+        data.eyeCatchImgUrl = uploadUrlData.fileName
       } catch (err) {
-        control.setError('eyeCatchImage', {
+        control.setError('eyeCatchImgUrl', {
           message: '画像のアップロードに失敗しました。',
         })
         return
       }
     }
-    // TODO: image url
     const baseUrl = process.env.NEXT_PUBLIC_API_PROXY_PATH
     if (!baseUrl) {
       throw new Error(envVarNotSetMessage('NEXT_PUBLIC_API_PROXY_PATH'))
@@ -292,35 +288,35 @@ const BlogForm = () => {
           {/* TODO: 改善 revokeURL */}
           <Controller
             control={control}
-            name="eyeCatchImage"
+            name="eyeCatchImgUrl"
             render={({ field: { onChange: onChangeEyeCatchImage } }) => (
               <>
                 <Dropzone
                   value={imageFiles}
                   onChange={(files) => {
                     if (files.length > 1) {
-                      control.setError('eyeCatchImage', {
+                      control.setError('eyeCatchImgUrl', {
                         message: 'アップロードできるファイルは1つです。',
                       })
                       return
                     }
-                    // TODO: destract files
                     const url = URL.createObjectURL(files[0])
                     setImageFiles([files[0]])
-                    // TODO: rename
-                    generateUrl(files[0].name, 'application/octet-stream')
+                    generateUrl(files[0].name, 'image/*')
                     onChangeEyeCatchImage(url)
                   }}
                 >
                   <Flex flexWrap="wrap">
                     <Text>
-                      {isLoadingGenerateUrl ? 'loading' : generatedUrl}
+                      {isLoadingGenerateUrl
+                        ? 'loading'
+                        : uploadUrlData?.fileName}
                     </Text>
                   </Flex>
                 </Dropzone>
-                {errors.eyeCatchImage && (
+                {errors.eyeCatchImgUrl && (
                   <Text as="label" variant="small" color="danger">
-                    {errors.eyeCatchImage.message}
+                    {errors.eyeCatchImgUrl.message}
                   </Text>
                 )}
               </>

@@ -15,10 +15,14 @@ export const uploadFile = async (
   })
 }
 
+export type UploadUrlData = {
+  url: string
+  fileName: string
+}
 export const useUploadUrl = (context: ApiContext) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | undefined>()
-  const [url, setUrl] = useState<string>()
+  const [data, setData] = useState<UploadUrlData>()
 
   const mutate = async (fileName: string, contentType: string) => {
     if (isLoading) {
@@ -33,7 +37,7 @@ export const useUploadUrl = (context: ApiContext) => {
           data: { fileName, contentType },
         },
       )
-      setUrl(data[0])
+      setData(data)
     } catch (err) {
       if (err instanceof Error) {
         setError(err)
@@ -46,7 +50,7 @@ export const useUploadUrl = (context: ApiContext) => {
   }
 
   return {
-    url,
+    data,
     isLoading,
     error,
     mutate,
